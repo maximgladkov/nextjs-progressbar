@@ -4,7 +4,7 @@
  *
  */
 
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import * as NProgress from 'nprogress';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
@@ -65,20 +65,22 @@ const NextNProgress = ({
   transformCSS = (css) => <style nonce={nonce}>{css}</style>,
 }: NextNProgressProps) => {
   let timer: NodeJS.Timeout | null = null;
+  
+  const router: any = useRouter();
 
   React.useEffect(() => {
     if (options) {
       NProgress.configure(options);
     }
-    Router.events.on('routeChangeStart', routeChangeStart);
-    Router.events.on('routeChangeComplete', routeChangeEnd);
-    Router.events.on('routeChangeError', routeChangeError);
+    router.events.on('routeChangeStart', routeChangeStart);
+    router.events.on('routeChangeComplete', routeChangeEnd);
+    router.events.on('routeChangeError', routeChangeError);
     return () => {
-      Router.events.off('routeChangeStart', routeChangeStart);
-      Router.events.off('routeChangeComplete', routeChangeEnd);
-      Router.events.off('routeChangeError', routeChangeError);
+      router.events.off('routeChangeStart', routeChangeStart);
+      router.events.off('routeChangeComplete', routeChangeEnd);
+      router.events.off('routeChangeError', routeChangeError);
     };
-  }, []);
+  }, [router]);
 
   const routeChangeStart = (
     _: string,
